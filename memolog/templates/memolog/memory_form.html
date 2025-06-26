@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Memory - Memory Playlist</title>
+    <!-- 基本的なスタイル -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-title {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #1DB954;
+            box-shadow: 0 0 5px rgba(29, 185, 84, 0.3);
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .submit-btn {
+            background: #1DB954;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background: #1ed760;
+        }
+        .back-link {
+            display: inline-block;
+            color: #666;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 0;
+        }
+        .back-link:hover {
+            color: #333;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .help-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Memory Playlist</h1>
+    
+    <!-- 一覧ページに戻るリンク -->
+    <a href="{% url 'memolog:memory_list' %}" class="back-link">← Back to Memories</a>
+    
+    <!-- フォームコンテナ -->
+    <div class="form-container">
+        <h2 class="form-title">Share Your Memory</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- タイトル -->
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error-message">{{ form.title.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- 説明 -->
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="error-message">{{ form.description.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- 曲名 -->
+            <div class="form-group">
+                <label for="{{ form.song_title.id_for_label }}" class="form-label">{{ form.song_title.label }}</label>
+                {{ form.song_title }}
+                {% if form.song_title.errors %}
+                    <div class="error-message">{{ form.song_title.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- アーティスト名 -->
+            <div class="form-group">
+                <label for="{{ form.artist_name.id_for_label }}" class="form-label">{{ form.artist_name.label }}</label>
+                {{ form.artist_name }}
+                {% if form.artist_name.errors %}
+                    <div class="error-message">{{ form.artist_name.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Spotify URL -->
+            <div class="form-group">
+                <label for="{{ form.spotify_url.id_for_label }}" class="form-label">{{ form.spotify_url.label }}</label>
+                {{ form.spotify_url }}
+                {% if form.spotify_url.errors %}
+                    <div class="error-message">{{ form.spotify_url.errors.0 }}</div>
+                {% endif %}
+                <div class="help-text">Copy the URL from Spotify and paste it here</div>
+            </div>
+            
+            <!-- 送信ボタン -->
+            <button type="submit" class="submit-btn">Share Memory</button>
+        </form>
+    </div>
+</body>
+</html> 
