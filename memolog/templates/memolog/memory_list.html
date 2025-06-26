@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Playlist</title>
+    <!-- 基本的なスタイル -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .memory-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .memory-title {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .song-info {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .spotify-link {
+            color: #1DB954;
+            text-decoration: none;
+        }
+        .spotify-link:hover {
+            text-decoration: underline;
+        }
+        .date {
+            color: #999;
+            font-size: 0.9em;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Memory Playlist</h1>
+    
+    <!-- 記憶の一覧を表示 -->
+    {% for memory in memories %}
+    <div class="memory-card">
+        <h2 class="memory-title">{{ memory.title }}</h2>
+        <p>{{ memory.description }}</p>
+        <div class="song-info">
+            <strong>{{ memory.song_title }}</strong> by {{ memory.artist_name }}
+        </div>
+        <a href="{{ memory.spotify_url }}" class="spotify-link" target="_blank">
+            Listen on Spotify
+        </a>
+        <div class="date">
+            Posted on {{ memory.created_at|date:"F j, Y" }}
+        </div>
+    </div>
+    {% empty %}
+    <div class="memory-card">
+        <p>No memories yet. Be the first to share your memory!</p>
+    </div>
+    {% endfor %}
+</body>
+</html> 
