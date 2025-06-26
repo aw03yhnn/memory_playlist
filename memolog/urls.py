@@ -8,6 +8,8 @@ app_name = 'memolog'
 urlpatterns = [
     # 記憶の一覧ページ（例：/memories/）
     path('', views.memory_list, name='memory_list'),
+    # 新しい記憶を投稿するページ（例：/memories/create/）
+    path('create/', views.memory_create, name='memory_create'),
     # 個別の記憶の詳細ページ（例：/memories/1/）
     path('<int:pk>/', views.memory_detail, name='memory_detail'),
 ] 
