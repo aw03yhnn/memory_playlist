@@ -43,6 +43,14 @@
             font-size: 1.5em;
             margin-bottom: 10px;
         }
+        .memory-title a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .memory-title a:hover {
+            color: #1DB954;
+        }
         .song-info {
             color: #666;
             margin-bottom: 10px;
@@ -74,7 +82,9 @@
     <!-- 記憶の一覧を表示 -->
     {% for memory in memories %}
     <div class="memory-card">
-        <h2 class="memory-title">{{ memory.title }}</h2>
+        <h2 class="memory-title">
+            <a href="{% url 'memolog:memory_detail' pk=memory.pk %}">{{ memory.title }}</a>
+        </h2>
         <p>{{ memory.description }}</p>
         <div class="song-info">
             <strong>{{ memory.song_title }}</strong> by {{ memory.artist_name }}
