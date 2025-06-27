@@ -19,6 +19,10 @@
             align-items: center;
             margin-bottom: 30px;
         }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
         .create-btn {
             background: #1DB954;
             color: white;
@@ -30,6 +34,18 @@
         }
         .create-btn:hover {
             background: #1ed760;
+        }
+        .random-btn {
+            background: #FF6B6B;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .random-btn:hover {
+            background: #FF5252;
         }
         .memory-card {
             background: white;
@@ -76,7 +92,10 @@
     <!-- ヘッダー部分 -->
     <div class="header">
         <h1>Memory Playlist</h1>
-        <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Share Memory</a>
+        <div class="nav-buttons">
+            <a href="{% url 'memolog:memory_random' %}" class="random-btn">🎲 Random Memory</a>
+            <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Share Memory</a>
+        </div>
     </div>
     
     <!-- 記憶の一覧を表示 -->

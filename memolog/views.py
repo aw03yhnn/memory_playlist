@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.db.models import Count
+from random import choice
 from .models import Memory
 from .forms import MemoryForm
 
@@ -32,3 +34,15 @@ def memory_create(request):
         form = MemoryForm()
     
     return render(request, 'memolog/memory_form.html', {'form': form})
+
+# ランダムな記憶を表示するビュー
+def memory_random(request):
+    # データベースからランダムに記憶を取得
+    memories = list(Memory.objects.all())
+    if memories:
+        # 記憶が存在する場合はランダムに選択
+        memory = choice(memories)
+        return render(request, 'memolog/memory_detail.html', {'memory': memory})
+    else:
+        # 記憶が存在しない場合は一覧ページにリダイレクト
+        return redirect('memolog:memory_list')
