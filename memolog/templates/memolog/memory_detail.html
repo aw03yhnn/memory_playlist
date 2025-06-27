@@ -95,6 +95,45 @@
         .spotify-link:hover {
             background: #1ed760;
         }
+        .share-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .share-title {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+        .share-btn:hover {
+            opacity: 0.8;
+        }
+        .twitter-btn {
+            background: #1DA1F2;
+            color: white;
+        }
+        .facebook-btn {
+            background: #4267B2;
+            color: white;
+        }
+        .line-btn {
+            background: #00B900;
+            color: white;
+        }
         .date {
             color: #999;
             font-size: 0.9em;
@@ -128,6 +167,25 @@
             <a href="{{ memory.spotify_url }}" class="spotify-link" target="_blank">
                 🎵 Listen on Spotify
             </a>
+        </div>
+        
+        <!-- SNSシェアセクション -->
+        <div class="share-section">
+            <h4 class="share-title">Share this memory:</h4>
+            <div class="share-buttons">
+                <a href="https://twitter.com/intent/tweet?text={{ memory.title|urlencode }} - {{ memory.song_title }} by {{ memory.artist_name }}&url={{ request.build_absolute_uri }}" 
+                   class="share-btn twitter-btn" target="_blank">
+                    🐦 Twitter
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                   class="share-btn facebook-btn" target="_blank">
+                    📘 Facebook
+                </a>
+                <a href="https://social-plugins.line.me/lineit/share?url={{ request.build_absolute_uri }}" 
+                   class="share-btn line-btn" target="_blank">
+                    💬 LINE
+                </a>
+            </div>
         </div>
         
         <div class="date">
