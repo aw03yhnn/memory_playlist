@@ -150,6 +150,37 @@
             margin: 0;
         }
     </style>
+    <script>
+        // Spotify URLからトラックIDを抽出する関数
+        function extractTrackId(url) {
+            const pattern = /spotify\.com\/.*\/track\/([a-zA-Z0-9]+)/;
+            const match = url.match(pattern);
+            return match ? match[1] : null;
+        }
+        
+        // ページ読み込み時にトラックIDを抽出してプレーヤーを表示
+        window.onload = function() {
+            const spotifyUrl = "{{ memory.spotify_url }}";
+            if (spotifyUrl) {
+                const trackId = extractTrackId(spotifyUrl);
+                if (trackId) {
+                    const playerContainer = document.getElementById('spotify-player-container');
+                    playerContainer.innerHTML = `
+                        <iframe 
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/track/${trackId}?utm_source=generator" 
+                            width="100%" 
+                            height="152" 
+                            frameborder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy">
+                        </iframe>
+                    `;
+                }
+            }
+        };
+    </script>
 </head>
 <body>
     <!-- ヘッダー部分 -->
@@ -172,22 +203,9 @@
             
             <!-- Spotify埋め込みプレーヤー -->
             {% if memory.spotify_url %}
-                {% with track_id=memory.spotify_url|slice:"31:" %}
-                    {% if track_id %}
-                        <div class="spotify-player">
-                            <iframe 
-                                style="border-radius:12px" 
-                                src="https://open.spotify.com/embed/track/{{ track_id }}?utm_source=generator" 
-                                width="100%" 
-                                height="152" 
-                                frameborder="0" 
-                                allowfullscreen="" 
-                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                                loading="lazy">
-                            </iframe>
-                        </div>
-                    {% endif %}
-                {% endwith %}
+                <div class="spotify-player" id="spotify-player-container">
+                    <!-- JavaScriptで動的にプレーヤーを生成 -->
+                </div>
             {% endif %}
             
             <a href="{{ memory.spotify_url }}" class="spotify-link" target="_blank">
