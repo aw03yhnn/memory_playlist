@@ -13,6 +13,24 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .create-btn {
+            background: #1DB954;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .create-btn:hover {
+            background: #1ed760;
+        }
         .memory-card {
             background: white;
             border-radius: 8px;
@@ -42,13 +60,16 @@
         }
         h1 {
             color: #333;
-            text-align: center;
-            margin-bottom: 30px;
+            margin: 0;
         }
     </style>
 </head>
 <body>
-    <h1>Memory Playlist</h1>
+    <!-- ヘッダー部分 -->
+    <div class="header">
+        <h1>Memory Playlist</h1>
+        <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Share Memory</a>
+    </div>
     
     <!-- 記憶の一覧を表示 -->
     {% for memory in memories %}
@@ -68,6 +89,7 @@
     {% empty %}
     <div class="memory-card">
         <p>No memories yet. Be the first to share your memory!</p>
+        <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Share Your First Memory</a>
     </div>
     {% endfor %}
 </body>
