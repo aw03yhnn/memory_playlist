@@ -82,6 +82,11 @@
             font-size: 1.1em;
             margin-bottom: 15px;
         }
+        .spotify-player {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
         .spotify-link {
             display: inline-block;
             background: #1DB954;
@@ -164,8 +169,23 @@
         <div class="song-section">
             <h3 class="song-title">{{ memory.song_title }}</h3>
             <p class="artist-name">by {{ memory.artist_name }}</p>
+            
+            <!-- Spotify埋め込みプレーヤー -->
+            <div class="spotify-player">
+                <iframe 
+                    style="border-radius:12px" 
+                    src="https://open.spotify.com/embed/track/{{ memory.spotify_url|slice:'31:' }}?utm_source=generator" 
+                    width="100%" 
+                    height="152" 
+                    frameborder="0" 
+                    allowfullscreen="" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                    loading="lazy">
+                </iframe>
+            </div>
+            
             <a href="{{ memory.spotify_url }}" class="spotify-link" target="_blank">
-                🎵 Listen on Spotify
+                🎵 Open in Spotify
             </a>
         </div>
         
