@@ -100,6 +100,57 @@
         .spotify-link:hover {
             background: #1ed760;
         }
+        .weekly-chart-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+            color: white;
+        }
+        .chart-title {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .chart-subtitle {
+            font-size: 1em;
+            margin-bottom: 20px;
+            text-align: center;
+            opacity: 0.9;
+        }
+        .chart-track {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+        .chart-track:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .chart-rank {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        .chart-track-info {
+            flex: 1;
+        }
+        .chart-track-title {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .chart-track-artist {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .chart-playcount {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
         .share-section {
             margin-top: 30px;
             padding-top: 20px;
@@ -212,6 +263,25 @@
                 🎵 Open in Spotify
             </a>
         </div>
+        
+        <!-- 週間チャートセクション -->
+        {% if weekly_chart %}
+        <div class="weekly-chart-section">
+            <h3 class="chart-title">🎵 That Week's Top Hits</h3>
+            <p class="chart-subtitle">What everyone else was listening to when you shared this memory</p>
+            
+            {% for track in weekly_chart %}
+            <div class="chart-track">
+                <div class="chart-rank">#{{ track.rank }}</div>
+                <div class="chart-track-info">
+                    <div class="chart-track-title">{{ track.title }}</div>
+                    <div class="chart-track-artist">{{ track.artist }}</div>
+                </div>
+                <div class="chart-playcount">{{ track.playcount }} plays</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         
         <!-- SNSシェアセクション -->
         <div class="share-section">
