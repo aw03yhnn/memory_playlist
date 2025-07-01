@@ -4,6 +4,7 @@ from django.db.models import Count
 from random import choice
 from .models import Memory
 from .forms import MemoryForm
+from .lastfm import get_weekly_chart_for_memory, format_chart_for_display
 
 # Create your views here.
 
@@ -17,7 +18,17 @@ def memory_list(request):
 def memory_detail(request, pk):
     # 指定されたIDの記憶を取得（存在しない場合は404エラー）
     memory = get_object_or_404(Memory, pk=pk)
-    return render(request, 'memolog/memory_detail.html', {'memory': memory})
+    
+    # 投稿日付に基づいて週間チャートを取得
+    chart_tracks = get_weekly_chart_for_memory(memory.created_at)
+    formatted_chart = format_chart_for_display(chart_tracks)
+    
+    context = {
+        'memory': memory,
+        'weekly_chart': formatted_chart
+    }
+    
+    return render(request, 'memolog/memory_detail.html', context)
 
 # 新しい記憶を投稿するビュー
 def memory_create(request):
@@ -42,7 +53,17 @@ def memory_random(request):
     if memories:
         # 記憶が存在する場合はランダムに選択
         memory = choice(memories)
-        return render(request, 'memolog/memory_detail.html', {'memory': memory})
+        
+        # 投稿日付に基づいて週間チャートを取得
+        chart_tracks = get_weekly_chart_for_memory(memory.created_at)
+        formatted_chart = format_chart_for_display(chart_tracks)
+        
+        context = {
+            'memory': memory,
+            'weekly_chart': formatted_chart
+        }
+        
+        return render(request, 'memolog/memory_detail.html', context)
     else:
         # 記憶が存在しない場合は一覧ページにリダイレクト
         return redirect('memolog:memory_list')
