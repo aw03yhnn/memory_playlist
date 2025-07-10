@@ -20,3 +20,5 @@ venv/
 
 # IDE
 .idea/
+*.sh
+~/Library/Application Support/Cursor/User/settings.json
