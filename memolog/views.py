@@ -1,69 +1,83 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
-from django.db.models import Count
-from random import choice
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 from .models import Memory
 from .forms import MemoryForm
-from .lastfm import get_weekly_chart_for_memory, format_chart_for_display
+from .lastfm_charts import get_weekly_charts
+from .spotify_recommendations import get_track_recommendations, get_artist_top_tracks
+import json
 
 # Create your views here.
 
-# 記憶の一覧を表示するビュー
 def memory_list(request):
-    # 投稿日時の新しい順で記憶を取得
+    """記憶一覧を表示"""
     memories = Memory.objects.all().order_by('-created_at')
     return render(request, 'memolog/memory_list.html', {'memories': memories})
 
-# 個別の記憶の詳細を表示するビュー
-def memory_detail(request, pk):
-    # 指定されたIDの記憶を取得（存在しない場合は404エラー）
-    memory = get_object_or_404(Memory, pk=pk)
+def memory_detail(request, memory_id):
+    """記憶詳細を表示"""
+    memory = get_object_or_404(Memory, pk=memory_id)
     
-    # 投稿日付に基づいて週間チャートを取得
-    chart_tracks = get_weekly_chart_for_memory(memory.created_at)
-    formatted_chart = format_chart_for_display(chart_tracks)
+    # Spotify推薦曲を取得
+    recommendations = []
+    artist_tracks = []
+    
+    if memory.spotify_url:
+        try:
+            recommendations = get_track_recommendations(memory.spotify_url, limit=5)
+            artist_tracks = get_artist_top_tracks(memory.spotify_url, limit=5)
+        except Exception as e:
+            print(f"Error getting recommendations: {e}")
     
     context = {
         'memory': memory,
-        'weekly_chart': formatted_chart
+        'recommendations': recommendations,
+        'artist_tracks': artist_tracks
     }
-    
     return render(request, 'memolog/memory_detail.html', context)
 
-# 新しい記憶を投稿するビュー
 def memory_create(request):
+    """記憶投稿フォームを表示・処理"""
     if request.method == 'POST':
-        # フォームデータが送信された場合
         form = MemoryForm(request.POST)
         if form.is_valid():
-            # フォームデータを保存
             memory = form.save()
-            # 保存後は詳細ページにリダイレクト
-            return redirect('memolog:memory_detail', pk=memory.pk)
+            return redirect('memory_detail', memory_id=memory.id)
     else:
-        # GETリクエストの場合は空のフォームを表示
         form = MemoryForm()
     
     return render(request, 'memolog/memory_form.html', {'form': form})
 
-# ランダムな記憶を表示するビュー
-def memory_random(request):
-    # データベースからランダムに記憶を取得
+def random_memory(request):
+    """ランダムな記憶を表示"""
+    import random
     memories = list(Memory.objects.all())
     if memories:
-        # 記憶が存在する場合はランダムに選択
-        memory = choice(memories)
-        
-        # 投稿日付に基づいて週間チャートを取得
-        chart_tracks = get_weekly_chart_for_memory(memory.created_at)
-        formatted_chart = format_chart_for_display(chart_tracks)
-        
-        context = {
-            'memory': memory,
-            'weekly_chart': formatted_chart
-        }
-        
-        return render(request, 'memolog/memory_detail.html', context)
-    else:
-        # 記憶が存在しない場合は一覧ページにリダイレクト
-        return redirect('memolog:memory_list')
+        random_memory = random.choice(memories)
+        return redirect('memory_detail', memory_id=random_memory.id)
+    return redirect('memory_list')
+
+def weekly_charts(request):
+    """週間チャートを表示"""
+    charts = get_weekly_charts()
+    return render(request, 'memolog/weekly_charts.html', {'charts': charts})
+
+@csrf_exempt
+def get_spotify_recommendations(request):
+    """AJAX用のSpotify推薦API"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            spotify_url = data.get('spotify_url')
+            
+            if not spotify_url:
+                return JsonResponse({'error': 'Spotify URL is required'}, status=400)
+            
+            recommendations = get_track_recommendations(spotify_url, limit=10)
+            return JsonResponse({'recommendations': recommendations})
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'POST method required'}, status=405)
