@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import json
 
 # Last.fm API設定（本番環境では環境変数から取得）
-LASTFM_API_KEY = 'your_lastfm_api_key_here'
+LASTFM_API_KEY = 'b6e807585725fe6b13c091ba218dc277'
 LASTFM_BASE_URL = 'http://ws.audioscrobbler.com/2.0/'
 
 def get_weekly_chart(date):
