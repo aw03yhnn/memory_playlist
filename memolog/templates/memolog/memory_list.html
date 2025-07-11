@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Playlist</title>
-    <!-- 基本的なスタイル -->
+    <!-- Basic Styles -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -89,16 +89,16 @@
     </style>
 </head>
 <body>
-    <!-- ヘッダー部分 -->
+    <!-- Header -->
     <div class="header">
         <h1>Memory Playlist</h1>
         <div class="nav-buttons">
             <a href="{% url 'memolog:random_memory' %}" class="random-btn">🎲 Random Memory</a>
-            <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Share Memory</a>
+            <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Add New Memory</a>
         </div>
     </div>
     
-    <!-- 記憶の一覧を表示 -->
+    <!-- Memory List -->
     {% for memory in memories %}
     <div class="memory-card">
         <h2 class="memory-title">

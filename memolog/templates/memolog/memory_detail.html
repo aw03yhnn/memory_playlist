@@ -1,56 +1,56 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ memory.title }} - 記憶プレイリスト{% endblock %}
+{% block title %}{{ memory.title }} - Memory Playlist{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-8">
-            <!-- 記憶の詳細 -->
+            <!-- Memory Detail -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h1 class="card-title mb-0">{{ memory.title }}</h1>
                 </div>
                 <div class="card-body">
                     <p class="text-muted mb-3">
-                        <i class="fas fa-calendar"></i> {{ memory.created_at|date:"Y年m月d日 H:i" }}
+                        <i class="fas fa-calendar"></i> Posted on {{ memory.created_at|date:"Y/m/d H:i" }}
                     </p>
                     
                     <div class="mb-4">
-                        <h5>記憶の説明</h5>
+                        <h5>Description</h5>
                         <p>{{ memory.description|linebreaks }}</p>
                     </div>
                     
                     <div class="mb-4">
-                        <h5>音楽情報</h5>
+                        <h5>Song Info</h5>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong>曲名:</strong> {{ memory.song_title }}</p>
-                                <p><strong>アーティスト:</strong> {{ memory.artist_name }}</p>
+                                <p><strong>Song Title:</strong> {{ memory.song_title }}</p>
+                                <p><strong>Artist:</strong> {{ memory.artist_name }}</p>
                             </div>
                             <div class="col-md-6">
                                 {% if memory.spotify_url %}
                                 <a href="{{ memory.spotify_url }}" target="_blank" class="btn btn-success">
-                                    <i class="fab fa-spotify"></i> Spotifyで聴く
+                                    <i class="fab fa-spotify"></i> Listen on Spotify
                                 </a>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Spotify埋め込みプレーヤー -->
+                    <!-- Spotify Player -->
                     {% if memory.spotify_url %}
                     <div class="mb-4">
-                        <h5>Spotifyプレーヤー</h5>
+                        <h5>Spotify Player</h5>
                         <div id="spotify-player" class="ratio ratio-16x9">
-                            <!-- JavaScriptで埋め込みプレーヤーを生成 -->
+                            <!-- JavaScript will generate the embed player -->
                         </div>
                     </div>
                     {% endif %}
                     
-                    <!-- SNSシェアボタン -->
+                    <!-- SNS Share Buttons -->
                     <div class="mb-4">
-                        <h5>シェア</h5>
+                        <h5>Share</h5>
                         <div class="btn-group" role="group">
                             <a href="https://twitter.com/intent/tweet?text={{ memory.title|urlencode }} - {{ memory.song_title|urlencode }}&url={{ request.build_absolute_uri }}" 
                                target="_blank" class="btn btn-outline-primary">
@@ -69,11 +69,11 @@
                 </div>
             </div>
             
-            <!-- Spotify推薦曲 -->
+            <!-- Spotify Recommendations -->
             {% if recommendations %}
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5><i class="fas fa-music"></i> この曲が好きな人はこれも好き</h5>
+                    <h5><i class="fas fa-music"></i> People who like this also like</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -86,9 +86,9 @@
                                     <p class="card-text small">{{ track.album }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <a href="{{ track.spotify_url }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                            <i class="fab fa-spotify"></i> 聴く
+                                            <i class="fab fa-spotify"></i> Listen
                                         </a>
-                                        <span class="badge bg-secondary">人気度: {{ track.popularity }}</span>
+                                        <span class="badge bg-secondary">Popularity: {{ track.popularity }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -99,11 +99,11 @@
             </div>
             {% endif %}
             
-            <!-- アーティストの人気曲 -->
+            <!-- Artist Top Tracks -->
             {% if artist_tracks %}
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5><i class="fas fa-star"></i> {{ memory.artist_name }}の人気曲</h5>
+                    <h5><i class="fas fa-star"></i> Top Tracks by {{ memory.artist_name }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -116,9 +116,9 @@
                                     <p class="card-text small">{{ track.album }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <a href="{{ track.spotify_url }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                            <i class="fab fa-spotify"></i> 聴く
+                                            <i class="fab fa-spotify"></i> Listen
                                         </a>
-                                        <span class="badge bg-secondary">人気度: {{ track.popularity }}</span>
+                                        <span class="badge bg-secondary">Popularity: {{ track.popularity }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -131,24 +131,24 @@
         </div>
         
         <div class="col-md-4">
-            <!-- ナビゲーション -->
+            <!-- Navigation -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5>ナビゲーション</h5>
+                    <h5>Navigation</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         <a href="{% url 'memolog:memory_list' %}" class="btn btn-outline-primary">
-                            <i class="fas fa-list"></i> 記憶一覧
+                            <i class="fas fa-list"></i> Memory List
                         </a>
                         <a href="{% url 'memolog:memory_create' %}" class="btn btn-outline-success">
-                            <i class="fas fa-plus"></i> 新しい記憶を投稿
+                            <i class="fas fa-plus"></i> Add New Memory
                         </a>
                         <a href="{% url 'memolog:random_memory' %}" class="btn btn-outline-warning">
-                            <i class="fas fa-random"></i> ランダム記憶
+                            <i class="fas fa-random"></i> Random Memory
                         </a>
                         <a href="{% url 'memolog:weekly_charts' %}" class="btn btn-outline-info">
-                            <i class="fas fa-chart-line"></i> 週間チャート
+                            <i class="fas fa-chart-line"></i> Weekly Chart
                         </a>
                     </div>
                 </div>
@@ -158,13 +158,13 @@
 </div>
 
 <script>
-// Spotify埋め込みプレーヤーの生成
+// Spotify embed player
 document.addEventListener('DOMContentLoaded', function() {
     const spotifyUrl = '{{ memory.spotify_url }}';
     if (spotifyUrl) {
         const playerContainer = document.getElementById('spotify-player');
         if (playerContainer) {
-            // Spotify URLからトラックIDを抽出
+            // Extract track ID from Spotify URL
             const trackId = spotifyUrl.match(/track\/([a-zA-Z0-9]+)/);
             if (trackId) {
                 const embedUrl = `https://open.spotify.com/embed/track/${trackId[1]}`;
