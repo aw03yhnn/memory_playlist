@@ -138,16 +138,16 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{% url 'memory_list' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'memolog:memory_list' %}" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> 記憶一覧
                         </a>
-                        <a href="{% url 'memory_create' %}" class="btn btn-outline-success">
+                        <a href="{% url 'memolog:memory_create' %}" class="btn btn-outline-success">
                             <i class="fas fa-plus"></i> 新しい記憶を投稿
                         </a>
-                        <a href="{% url 'random_memory' %}" class="btn btn-outline-warning">
+                        <a href="{% url 'memolog:random_memory' %}" class="btn btn-outline-warning">
                             <i class="fas fa-random"></i> ランダム記憶
                         </a>
-                        <a href="{% url 'weekly_charts' %}" class="btn btn-outline-info">
+                        <a href="{% url 'memolog:weekly_charts' %}" class="btn btn-outline-info">
                             <i class="fas fa-chart-line"></i> 週間チャート
                         </a>
                     </div>

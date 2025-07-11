@@ -1,10 +1,11 @@
 import requests
 import re
+import os
 from typing import List, Dict, Optional
 
-# Spotify API設定（本番環境では環境変数から取得）
-SPOTIFY_CLIENT_ID = 'your_spotify_client_id_here'
-SPOTIFY_CLIENT_SECRET = 'your_spotify_client_secret_here'
+# Spotify API設定（環境変数から取得）
+SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID', 'your_spotify_client_id_here')
+SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET', 'your_spotify_client_secret_here')
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 SPOTIFY_API_BASE = 'https://api.spotify.com/v1'
 

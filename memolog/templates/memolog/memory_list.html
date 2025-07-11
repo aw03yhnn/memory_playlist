@@ -93,7 +93,7 @@
     <div class="header">
         <h1>Memory Playlist</h1>
         <div class="nav-buttons">
-            <a href="{% url 'memolog:memory_random' %}" class="random-btn">🎲 Random Memory</a>
+            <a href="{% url 'memolog:random_memory' %}" class="random-btn">🎲 Random Memory</a>
             <a href="{% url 'memolog:memory_create' %}" class="create-btn">+ Share Memory</a>
         </div>
     </div>
@@ -102,7 +102,7 @@
     {% for memory in memories %}
     <div class="memory-card">
         <h2 class="memory-title">
-            <a href="{% url 'memolog:memory_detail' pk=memory.pk %}">{{ memory.title }}</a>
+            <a href="{% url 'memolog:memory_detail' memory_id=memory.id %}">{{ memory.title }}</a>
         </h2>
         <p>{{ memory.description }}</p>
         <div class="song-info">

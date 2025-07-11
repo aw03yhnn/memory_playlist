@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .models import Memory
 from .forms import MemoryForm
-from .lastfm_charts import get_weekly_charts
+from .lastfm import get_weekly_chart_for_memory, format_chart_for_display
 from .spotify_recommendations import get_track_recommendations, get_artist_top_tracks
 import json
 
@@ -60,7 +60,10 @@ def random_memory(request):
 
 def weekly_charts(request):
     """週間チャートを表示"""
-    charts = get_weekly_charts()
+    from datetime import datetime
+    current_date = datetime.now()
+    chart_tracks = get_weekly_chart_for_memory(current_date)
+    charts = format_chart_for_display(chart_tracks)
     return render(request, 'memolog/weekly_charts.html', {'charts': charts})
 
 @csrf_exempt
