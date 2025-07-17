@@ -2,14 +2,11 @@ from django import forms
 from .models import Memory
 from .utils import get_spotify_track_info
 
-# 記憶投稿用のフォームクラス
 class MemoryForm(forms.ModelForm):
     class Meta:
         model = Memory
-        # 投稿日時は自動設定されるので除外
         fields = ['title', 'description', 'song_title', 'artist_name', 'spotify_url']
         
-        # フォームのラベルとプレースホルダーを設定
         labels = {
             'title': 'Memory Title',
             'description': 'Memory Description',
@@ -18,7 +15,6 @@ class MemoryForm(forms.ModelForm):
             'spotify_url': 'Spotify URL',
         }
         
-        # 入力欄のプレースホルダーテキスト
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'e.g., High school graduation day',
@@ -47,17 +43,13 @@ class MemoryForm(forms.ModelForm):
         }
     
     def clean(self):
-        """
-        フォームのバリデーション時にSpotify URLから曲情報を自動取得
-        """
+        """フォームのバリデーション時にSpotify URLから曲情報を自動取得"""
         cleaned_data = super().clean()
         spotify_url = cleaned_data.get('spotify_url')
         
-        # Spotify URLが入力されている場合
         if spotify_url:
             song_title, artist_name = get_spotify_track_info(spotify_url)
             
-            # 曲情報が取得できた場合、フィールドに設定
             if song_title and artist_name:
                 cleaned_data['song_title'] = song_title
                 cleaned_data['artist_name'] = artist_name
