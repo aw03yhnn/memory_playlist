@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils import timezone
 from .models import Memory
 from .forms import MemoryForm
-from .lastfm import get_weekly_chart_for_memory, format_chart_for_display
 from .spotify_recommendations import get_track_recommendations, get_artist_top_tracks
+import random
 import json
 
 # Create your views here.
@@ -19,7 +18,6 @@ def memory_detail(request, memory_id):
     """記憶詳細を表示"""
     memory = get_object_or_404(Memory, pk=memory_id)
     
-    # Spotify推薦曲を取得
     recommendations = []
     artist_tracks = []
     
@@ -28,14 +26,13 @@ def memory_detail(request, memory_id):
             recommendations = get_track_recommendations(memory.spotify_url, limit=5)
             artist_tracks = get_artist_top_tracks(memory.spotify_url, limit=5)
         except Exception as e:
-            print(f"Error getting recommendations: {e}")
+            print(f"Error getting Spotify recommendations: {e}")
     
-    context = {
+    return render(request, 'memolog/memory_detail.html', {
         'memory': memory,
         'recommendations': recommendations,
         'artist_tracks': artist_tracks
-    }
-    return render(request, 'memolog/memory_detail.html', context)
+    })
 
 def memory_create(request):
     """記憶投稿フォームを表示・処理"""
@@ -43,7 +40,7 @@ def memory_create(request):
         form = MemoryForm(request.POST)
         if form.is_valid():
             memory = form.save()
-            return redirect('memory_detail', memory_id=memory.id)
+            return redirect('memolog:memory_detail', memory_id=memory.id)
     else:
         form = MemoryForm()
     
@@ -51,36 +48,28 @@ def memory_create(request):
 
 def random_memory(request):
     """ランダムな記憶を表示"""
-    import random
     memories = list(Memory.objects.all())
-    if memories:
-        random_memory = random.choice(memories)
-        return redirect('memory_detail', memory_id=random_memory.id)
-    return redirect('memory_list')
-
-def weekly_charts(request):
-    """週間チャートを表示"""
-    from datetime import datetime
-    current_date = datetime.now()
-    chart_tracks = get_weekly_chart_for_memory(current_date)
-    charts = format_chart_for_display(chart_tracks)
-    return render(request, 'memolog/weekly_charts.html', {'charts': charts})
+    if not memories:
+        return redirect('memolog:memory_list')
+    
+    random_memory = random.choice(memories)
+    return redirect('memolog:memory_detail', memory_id=random_memory.id)
 
 @csrf_exempt
 def get_spotify_recommendations(request):
     """AJAX用のSpotify推薦API"""
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            spotify_url = data.get('spotify_url')
-            
-            if not spotify_url:
-                return JsonResponse({'error': 'Spotify URL is required'}, status=400)
-            
-            recommendations = get_track_recommendations(spotify_url, limit=10)
-            return JsonResponse({'recommendations': recommendations})
-            
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST method required'}, status=405)
     
-    return JsonResponse({'error': 'POST method required'}, status=405)
+    try:
+        data = json.loads(request.body)
+        spotify_url = data.get('spotify_url')
+        
+        if not spotify_url:
+            return JsonResponse({'error': 'Spotify URL is required'}, status=400)
+        
+        recommendations = get_track_recommendations(spotify_url, limit=10)
+        return JsonResponse({'recommendations': recommendations})
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
