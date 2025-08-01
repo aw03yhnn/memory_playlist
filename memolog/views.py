@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Memory
 from .forms import MemoryForm
 from .spotify_recommendations import get_track_recommendations, get_artist_top_tracks
+from datetime import datetime
 import random
 import json
 
@@ -45,6 +46,26 @@ def memory_create(request):
         form = MemoryForm()
     
     return render(request, 'memolog/memory_form.html', {'form': form})
+
+def memory_edit(request, memory_id):
+    """記憶編集フォームを表示・処理"""
+    memory = get_object_or_404(Memory, pk=memory_id)
+    
+    if request.method == 'POST':
+        form = MemoryForm(request.POST, instance=memory)
+        if form.is_valid():
+            memory = form.save()
+            return redirect('memolog:memory_detail', memory_id=memory.id)
+    else:
+        form = MemoryForm(instance=memory)
+    
+    return render(request, 'memolog/memory_form.html', {'form': form, 'is_edit': True})
+
+def memory_delete(request, memory_id):
+    """記憶削除処理"""
+    memory = get_object_or_404(Memory, pk=memory_id)
+    memory.delete()
+    return redirect('memolog:memory_list')
 
 def random_memory(request):
     """ランダムな記憶を表示"""
