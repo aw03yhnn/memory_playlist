@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.memory_list, name='memory_list'),
     path('memory/<int:memory_id>/', views.memory_detail, name='memory_detail'),
     path('memory/create/', views.memory_create, name='memory_create'),
+    path('memory/<int:memory_id>/edit/', views.memory_edit, name='memory_edit'),
+    path('memory/<int:memory_id>/delete/', views.memory_delete, name='memory_delete'),
     path('random/', views.random_memory, name='random_memory'),
     path('api/spotify-recommendations/', views.get_spotify_recommendations, name='spotify_recommendations'),
 ] 
