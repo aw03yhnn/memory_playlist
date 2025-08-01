@@ -147,6 +147,14 @@
                         <a href="{% url 'memolog:random_memory' %}" class="btn btn-outline-warning">
                             <i class="fas fa-random"></i> Random Memory
                         </a>
+                        <hr>
+                        <a href="{% url 'memolog:memory_edit' memory_id=memory.id %}" class="btn btn-outline-info">
+                            <i class="fas fa-edit"></i> Edit Memory
+                        </a>
+                        <a href="{% url 'memolog:memory_delete' memory_id=memory.id %}" class="btn btn-outline-danger" 
+                           onclick="return confirm('Are you sure you want to delete this memory?')">
+                            <i class="fas fa-trash"></i> Delete Memory
+                        </a>
                     </div>
                 </div>
             </div>
