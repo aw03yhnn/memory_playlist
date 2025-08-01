@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Add New Memory - Memory Playlist{% endblock %}
+{% block title %}{% if is_edit %}Edit Memory{% else %}Add New Memory{% endif %} - Memory Playlist{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -8,13 +8,15 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="mb-0">Add New Memory</h2>
+                    <h2 class="mb-0">{% if is_edit %}Edit Memory{% else %}Add New Memory{% endif %}</h2>
                 </div>
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">
+                            {% if is_edit %}Update{% else %}Save{% endif %}
+                        </button>
                         <a href="{% url 'memolog:memory_list' %}" class="btn btn-secondary">Back to List</a>
                     </form>
                 </div>
