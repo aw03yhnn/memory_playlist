@@ -9,40 +9,38 @@
             <!-- Memory Detail -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h1 class="card-title mb-0">{{ memory.title }}</h1>
+                    <h1 class="memory-title mb-0">{{ memory.title }}</h1>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted mb-3">
+                    <p class="meta">
                         <i class="fas fa-calendar"></i> Posted on {{ memory.created_at|date:"Y/m/d H:i" }}
                     </p>
                     
                     <div class="mb-4">
-                        <h5>Description</h5>
-                        <p>{{ memory.description|linebreaks }}</p>
+                        <h5 class="section-title">Description</h5>
+                        <p class="memory-desc">{{ memory.description|linebreaks }}</p>
                     </div>
                     
                     <div class="mb-4">
-                        <h5>Song Info</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Song Title:</strong> {{ memory.song_title }}</p>
-                                <p><strong>Artist:</strong> {{ memory.artist_name }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                {% if memory.spotify_url %}
-                                <a href="{{ memory.spotify_url }}" target="_blank" class="btn btn-success">
-                                    <i class="fab fa-spotify"></i> Listen on Spotify
-                                </a>
-                                {% endif %}
-                            </div>
+                        <h5 class="section-title">Song Info</h5>
+                        <div class="song-line">
+                            <span class="song">{{ memory.song_title }}</span>
+                            <span class="artist">by {{ memory.artist_name }}</span>
+                        </div>
+                        <div class="mt-2">
+                            {% if memory.spotify_url %}
+                            <a href="{{ memory.spotify_url }}" target="_blank" class="btn">
+                                <i class="fab fa-spotify"></i> Listen on Spotify
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                     
                     <!-- Spotify Player -->
                     {% if memory.spotify_url %}
                     <div class="mb-4">
-                        <h5>Spotify Player</h5>
-                        <div id="spotify-player" class="ratio ratio-16x9">
+                        <h5 class="section-title">Spotify Player</h5>
+                        <div id="spotify-player" class="ratio ratio-16x9 spotify-player">
                             <!-- JavaScript will generate the embed player -->
                         </div>
                     </div>
@@ -50,18 +48,18 @@
                     
                     <!-- SNS Share Buttons -->
                     <div class="mb-4">
-                        <h5>Share</h5>
+                        <h5 class="section-title">Share</h5>
                         <div class="btn-group" role="group">
                             <a href="https://twitter.com/intent/tweet?text={{ memory.title|urlencode }} - {{ memory.song_title|urlencode }}&url={{ request.build_absolute_uri }}" 
-                               target="_blank" class="btn btn-outline-primary">
+                               target="_blank" class="btn">
                                 <i class="fab fa-twitter"></i> Twitter
                             </a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
-                               target="_blank" class="btn btn-outline-primary">
+                               target="_blank" class="btn">
                                 <i class="fab fa-facebook"></i> Facebook
                             </a>
                             <a href="https://social-plugins.line.me/lineit/share?url={{ request.build_absolute_uri }}" 
-                               target="_blank" class="btn btn-outline-success">
+                               target="_blank" class="btn">
                                 <i class="fab fa-line"></i> LINE
                             </a>
                         </div>
@@ -73,7 +71,7 @@
             {% if recommendations %}
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5><i class="fas fa-music"></i> People who like this also like</h5>
+                    <h5 class="section-title"><i class="fas fa-music"></i> People who like this also like</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -85,7 +83,7 @@
                                     <p class="card-text text-muted">{{ track.artist }}</p>
                                     <p class="card-text small">{{ track.album }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <a href="{{ track.spotify_url }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <a href="{{ track.spotify_url }}" target="_blank" class="btn btn-sm">
                                             <i class="fab fa-spotify"></i> Listen
                                         </a>
                                         <span class="badge bg-secondary">Popularity: {{ track.popularity }}</span>
@@ -103,7 +101,7 @@
             {% if artist_tracks %}
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5><i class="fas fa-star"></i> Top Tracks by {{ memory.artist_name }}</h5>
+                    <h5 class="section-title"><i class="fas fa-star"></i> Top Tracks by {{ memory.artist_name }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -115,7 +113,7 @@
                                     <p class="card-text text-muted">{{ track.artist }}</p>
                                     <p class="card-text small">{{ track.album }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <a href="{{ track.spotify_url }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <a href="{{ track.spotify_url }}" target="_blank" class="btn btn-sm">
                                             <i class="fab fa-spotify"></i> Listen
                                         </a>
                                         <span class="badge bg-secondary">Popularity: {{ track.popularity }}</span>
@@ -134,24 +132,24 @@
             <!-- Navigation -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5>Navigation</h5>
+                    <h5 class="section-title">Navigation</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{% url 'memolog:memory_list' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'memolog:memory_list' %}" class="btn">
                             <i class="fas fa-list"></i> Memory List
                         </a>
-                        <a href="{% url 'memolog:memory_create' %}" class="btn btn-outline-success">
+                        <a href="{% url 'memolog:memory_create' %}" class="btn">
                             <i class="fas fa-plus"></i> Add New Memory
                         </a>
-                        <a href="{% url 'memolog:random_memory' %}" class="btn btn-outline-warning">
+                        <a href="{% url 'memolog:random_memory' %}" class="btn">
                             <i class="fas fa-random"></i> Random Memory
                         </a>
                         <hr>
-                        <a href="{% url 'memolog:memory_edit' memory_id=memory.id %}" class="btn btn-outline-info">
+                        <a href="{% url 'memolog:memory_edit' memory_id=memory.id %}" class="btn">
                             <i class="fas fa-edit"></i> Edit Memory
                         </a>
-                        <a href="{% url 'memolog:memory_delete' memory_id=memory.id %}" class="btn btn-outline-danger" 
+                        <a href="{% url 'memolog:memory_delete' memory_id=memory.id %}" class="btn" 
                            onclick="return confirm('Are you sure you want to delete this memory?')">
                             <i class="fas fa-trash"></i> Delete Memory
                         </a>

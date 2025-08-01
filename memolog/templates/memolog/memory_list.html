@@ -6,9 +6,9 @@
 <div class="container">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Memory Playlist</h1>
+        <h1 class="memory-title">Memory Playlist</h1>
         <div class="d-flex gap-2">
-            <a href="{% url 'memolog:random_memory' %}" class="btn btn-outline-warning">
+            <a href="{% url 'memolog:random_memory' %}" class="btn">
                 🎲 Random Memory
             </a>
             <a href="{% url 'memolog:memory_create' %}" class="btn btn-primary">
@@ -19,28 +19,24 @@
     
     <!-- Memory List -->
     {% for memory in memories %}
-    <div class="card memory-card mb-3">
-        <div class="card-body">
-            <h2 class="card-title">
-                <a href="{% url 'memolog:memory_detail' memory_id=memory.id %}">{{ memory.title }}</a>
-            </h2>
-            <p class="card-text">{{ memory.description }}</p>
-            <div class="text-muted mb-2">
-                <strong>{{ memory.song_title }}</strong> by {{ memory.artist_name }}
-            </div>
-            {% if memory.spotify_url %}
-            <a href="{{ memory.spotify_url }}" class="btn btn-sm btn-outline-success" target="_blank">
-                Listen on Spotify
-            </a>
-            {% endif %}
-            <div class="text-muted mt-2">
-                <small>Posted on {{ memory.created_at|date:"F j, Y" }}</small>
-            </div>
+    <div class="memory-card">
+        <div class="card-head">
+            <h2 class="memory-title"><a href="{% url 'memolog:memory_detail' memory_id=memory.id %}">{{ memory.title }}</a></h2>
+            <!-- 右側に操作を置きたい場合は必要に応じて配置 -->
         </div>
+        <p class="memory-desc">{{ memory.description|truncatechars:120 }}</p>
+        <div class="song-line">
+            <span class="song">{{ memory.song_title }}</span>
+            <span class="artist">by {{ memory.artist_name }}</span>
+        </div>
+        <div class="mt-2">
+            <a href="{{ memory.spotify_url }}" class="btn btn-sm" target="_blank">Listen on Spotify</a>
+        </div>
+        <div class="meta">Posted on {{ memory.created_at|date:"Y.m.d" }}</div>
     </div>
     {% empty %}
     <div class="card">
-        <div class="card-body text-center">
+        <div class="card-body empty-state">
             <p>No memories yet. Be the first to share your memory!</p>
             <a href="{% url 'memolog:memory_create' %}" class="btn btn-primary">+ Share Your First Memory</a>
         </div>
